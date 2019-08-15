@@ -22,7 +22,7 @@ $ gradlew bootRun
 ```
 $ cd client-side
 $ npm install
-$ npm run serve --port 4000
+$ npm run serve --port=4000
 ```
 
 ### Access application using following URL
