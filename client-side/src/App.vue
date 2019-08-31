@@ -83,6 +83,8 @@ export default {
   },
   watch: {
     $route(to, from) {
+      //You can get warning, if you don't use paremeters.
+      console.log(to + " -> " + from);
       this.clearAlert();
     }
   }  

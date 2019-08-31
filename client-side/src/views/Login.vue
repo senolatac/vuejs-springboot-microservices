@@ -1,76 +1,92 @@
 <template>
-    <div class="col-md-12">
-        <div class="card card-container">
-            <img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="profile-img-card"/>
-            <form name="form" @submit.prevent="handleLogin">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control"
-                    name="username" v-model="user.username"
-                    v-validate="required"/>
-                    <div class="alert alert-danger" role="alert"
-                    v-if="errors.has('username')">
-                        Username is required.
-                    </div>
-                </div>    
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control"
-                    name="password" v-model="user.password"
-                    v-validate="required"/>
-                    <div class="alert alert-danger" role="alert"
-                    v-if="errors.has('password')">
-                        Password is required.
-                    </div>
-                </div>
-                <div class="form-group">
-                <button class="btn btn-primary btn-block"
-                :disabled="loading">
-                    <span class="spinner-border spinner-border-sm"
-                    v-show="loading"></span>
-                    <span>Login</span>
-                </button>
-                </div>
-            </form>
+  <div class="col-md-12">
+    <div class="card card-container">
+      <img
+        id="profile-img"
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        class="profile-img-card"
+      />
+      <form name="form" @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            v-model="user.username"
+            v-validate="'required'"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            v-if="errors.has('username')"
+          >Username is required.</div>
         </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            v-model="user.password"
+            v-validate="'required'"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            v-if="errors.has('password')"
+          >Password is required.</div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" :disabled="loading">
+            <span class="spinner-border spinner-border-sm" v-show="loading"></span>
+            <span>Login</span>
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </template>
 <script>
-import UserService from '../services/user.service';
-import {User} from '../models/user';
+import UserService from "../services/user.service";
+import { User } from "../models/user";
 export default {
-    name: 'login',
-    data() {
-        return {
-            user: new User('',''),
-            loading: false,
-        };
-    },
-    mounted() {
-        if(UserService.currentUserValue) {
-            this.$router.push('/profile');
-        }
-    },
-    methods: {
-        handleLogin() {
-            this.loading = true;
-            this.$validator.validateAll();
-            if(this.errors.any()) {
-                this.loading = false;
-                return;
-            }
-            UserService.login(this.user).then(
-                data => {
-                    this.$router.push('/profile');
-                },
-                error => {
-                    this.loading = false;
-                    this.$store.dispatch('error', 'Username or password is not valid.');
-                }
-            );
-        }
+  name: "login",
+  data() {
+    return {
+      user: new User("", ""),
+      loading: false
+    };
+  },
+  mounted() {
+    if (UserService.currentUserValue) {
+      this.$router.push("/profile");
     }
-}
+  },
+  methods: {
+    handleLogin() {
+      this.loading = true;
+      this.$validator.validateAll();
+      if (this.errors.any()) {
+        this.loading = false;
+        return;
+      }
+      UserService.login(this.user).then(
+        data => {
+          //You can get warning, if you don't use paremeters.
+          console.log(data);
+          this.$router.push("/profile");
+        },
+        error => {
+          //You can get warning, if you don't use paremeters.
+          console.log(error);
+          this.loading = false;
+          this.$store.dispatch("error", "Username or password is not valid.");
+        }
+      );
+    }
+  }
+};
 </script>
 <style scoped>
 label {
